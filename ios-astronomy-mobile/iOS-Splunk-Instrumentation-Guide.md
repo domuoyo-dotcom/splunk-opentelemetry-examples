@@ -524,7 +524,7 @@ func triggerRuntimeExceptionCrash() {
 
 ---
 
-### Step 14: View Crash Reports in Splunk
+### Step 14: [Optional] View Crash Reports in Splunk
 
 1. Go to **RUM > Errors** in Splunk Observability Cloud
 2. Filter by `error.type = CrashSimulation` or `crash.type`
@@ -582,8 +582,8 @@ After running the instrumented app:
 | Topic | Link |
 |-------|------|
 | iOS RUM overview | [Instrument iOS applications for Splunk RUM](https://help.splunk.com/en/splunk-observability-cloud/manage-data/instrument-front-end-applications/instrument-mobile-and-web-applications-for-splunk-rum/instrument-ios-applications-for-splunk-rum) |
-| Install the SDK | [Install the iOS RUM library](https://help.splunk.com/en/splunk-observability-cloud/manage-data/instrument-front-end-applications/instrument-mobile-and-web-applications-for-splunk-rum/instrument-ios-applications-for-splunk-rum/install-the-ios-rum-library-for-splunk-rum) |
-| Custom events & workflows | [Track scenarios with custom events](https://help.splunk.com/en/splunk-observability-cloud/manage-data/instrument-front-end-applications/instrument-mobile-and-web-applications-for-splunk-rum/instrument-ios-applications-for-splunk-rum/track-ios-application-scenarios-using-splunk-rum) |
+| Install the SDK | [Install the iOS RUM library](https://help.splunk.com/en/appdynamics-on-premises/end-user-monitoring/26.2.0/end-user-monitoring/mobile-real-user-monitoring/instrument-ios-applications/install-the-ios-sdk) |
+| Custom events & workflows | [Track scenarios with custom events](https://help.splunk.com/en/splunk-observability-cloud/monitor-end-user-experience/real-user-monitoring/create-custom-events) |
 | Session Replay | [Replay user sessions](https://help.splunk.com/en/splunk-observability-cloud/monitor-end-user-experience/real-user-monitoring/replay-user-sessions) |
 | GitHub SDK repo | [signalfx/splunk-otel-ios](https://github.com/signalfx/splunk-otel-ios) |
 | OpenTelemetry Swift | [open-telemetry/opentelemetry-swift](https://github.com/open-telemetry/opentelemetry-swift) |
