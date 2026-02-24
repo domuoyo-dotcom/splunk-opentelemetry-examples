@@ -232,22 +232,6 @@ Once the app launches in the Simulator:
 
 ### Keyboard Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Cmd + Shift + H` | Go to Home screen |
-| `Cmd + Right Arrow` | Rotate right |
-| `Cmd + Left Arrow` | Rotate left |
-| `Cmd + S` | Take screenshot |
-| `Cmd + K` | Toggle software keyboard |
-| `Cmd + Shift + K` | Toggle keyboard connect |
-
-### Simulator Menu Options
-
-- **Device > Shake** - Trigger shake gesture
-- **Device > Rotate** - Change orientation
-- **Features > Toggle Appearance** - Switch light/dark mode
-- **Debug > Slow Animations** - Debug UI animations
-
 ### Reset Simulator
 
 If the app behaves unexpectedly:
