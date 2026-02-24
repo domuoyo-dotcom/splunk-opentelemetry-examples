@@ -8,7 +8,10 @@ dependencies = [
     "langchain>=0.3.27",
     "langchain-openai>=0.3.32",
     "langgraph>=0.6.6",
-    "openlit==1.35.1",
-    "splunk-opentelemetry==2.9.0",
-    "splunk-otel-util-genai-translator-openlit==0.1.1",
+    "splunk-opentelemetry==2.8.0",
+    "splunk-otel-genai-emitters-splunk==0.1.7",
+    "splunk-otel-genai-evals-deepeval==0.1.13",
+    "splunk-otel-instrumentation-langchain==0.1.7",
+    "splunk-otel-util-genai==0.1.9",
+    "splunk-otel-util-genai-evals==0.1.8",
 ]

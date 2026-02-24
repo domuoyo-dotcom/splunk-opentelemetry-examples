@@ -9,11 +9,11 @@ from pydantic import BaseModel, Field
 import uuid
 import asyncio
 from datetime import datetime
+import time
 from opentelemetry import trace
-import openlit
+from langgraph.prebuilt import create_react_agent as _create_react_agent
 
 tracer = trace.get_tracer("langgraph-example")
-openlit.init(environment="test")
 
 class State(TypedDict):
     messages: Annotated[List[Any], add_messages]
@@ -36,25 +36,72 @@ class AssignmentResult(BaseModel):
 
 class MathProblems:
     def __init__(self):
+        self.teacher_agent= None
         self.teacher_llm_with_output = None
+        self.student_agent = None
         self.student_llm_with_output = None
+        self.teaching_assistant_agent = None
         self.teaching_assistant_llm_with_output = None
         self.graph = None
 
+    async def _create_llm(self, agent_name: str, *, temperature: float, session_id: str) -> ChatOpenAI:
+        """Create an LLM instance decorated with tags/metadata for tracing."""
+        model = "gpt-4o-mini"
+        tags = [f"agent:{agent_name}", "langgraph-example"]
+        metadata = {
+            "agent_name": agent_name,
+            "agent_type": agent_name,
+            "session_id": session_id,
+            "thread_id": session_id,
+            "ls_model_name": model,
+            "ls_temperature": temperature,
+        }
+
+        base = ChatOpenAI(
+            model=model,
+            temperature=temperature,
+            tags=tags,
+            metadata=metadata,
+        )
+
+        return base
+
     async def setup(self):
 
-        teacher_llm = ChatOpenAI(model="gpt-4o-mini")
+        teacher_llm = await self._create_llm(agent_name="teacher_agent", temperature=0.7, session_id=None)
+        self.teacher_agent = _create_react_agent(teacher_llm, tools=[]).with_config(
+            {
+                "run_name": "teacher_agent",
+                "tags": ["agent", "agent:teacher_agent"],
+                "metadata": {"agent_name": "teacher_agent"},
+            }
+        )
+
         self.teacher_llm_with_output = teacher_llm.with_structured_output(MathQuestion)
 
-        student_llm = ChatOpenAI(model="gpt-4o-mini")
+        student_llm = await self._create_llm(agent_name="student_agent", temperature=0.7, session_id=None)
+        self.student_agent = _create_react_agent(student_llm, tools=[]).with_config(
+            {
+                "run_name": "student_agent",
+                "tags": ["agent", "agent:student_agent"],
+                "metadata": {"agent_name": "student_agent"},
+            }
+        )
         self.student_llm_with_output = student_llm.with_structured_output(AssignmentSolution)
 
-        teaching_assistant_llm = ChatOpenAI(model="gpt-4o-mini")
+        teaching_assistant_llm = await self._create_llm(agent_name="teaching_assistant_agent", temperature=0.7, session_id=None)
+        self.teaching_assistant_agent = _create_react_agent(teaching_assistant_llm, tools=[]).with_config(
+            {
+                "run_name": "teaching_assistant_agent",
+                "tags": ["agent", "agent:teaching_assistant_agent"],
+                "metadata": {"agent_name": "teaching_assistant_agent"},
+            }
+        )
         self.teaching_assistant_llm_with_output = teaching_assistant_llm.with_structured_output(AssignmentResult)
 
         await self.build_graph()
 
-    def teacher(self, state: State) -> Dict[str, Any]:
+    async def teacher(self, state: State) -> Dict[str, Any]:
 
         INSTRUCTIONS = f"""
             You're a seasoned teacher with a knack for keeping students
@@ -75,10 +122,20 @@ class MathProblems:
         if not found_system_message:
             messages = [SystemMessage(content=INSTRUCTIONS)] + messages
 
-        # Invoke the LLM with tools
-        result = self.teacher_llm_with_output.invoke(messages)
+        # Run the ReAct agent
+        agent_out = await self.teacher_agent.ainvoke(state)
 
-        # Return updated state
+        # agent_out typically includes "messages"
+        messages = agent_out["messages"]
+        last = messages[-1]
+        if not isinstance(last, AIMessage):
+            # If tools are used, you may need to locate the last AI message
+            last = next(m for m in reversed(messages) if isinstance(m, AIMessage))
+
+        # Cast final text into your schema
+        result: AssignmentSolution = await self.teacher_llm_with_output.ainvoke(last.content)
+
+        # Return typed output (and optionally keep messages updated)
         new_state = {
             "messages": [{"role": "assistant", "content": f"The question is: {result.question}"}],
             "question": result.question
@@ -86,7 +143,7 @@ class MathProblems:
 
         return new_state
 
-    def student(self, state: State) -> Dict[str, Any]:
+    async def student(self, state: State) -> Dict[str, Any]:
 
         INSTRUCTIONS = f"""You're a meticulous Grade 8 student with a keen eye for detail. You're known for
             your ability to apply logic to just about any math problem the teacher
@@ -106,10 +163,20 @@ class MathProblems:
         if not found_system_message:
             messages = [SystemMessage(content=INSTRUCTIONS)] + messages
 
-        # Invoke the LLM with tools
-        result = self.student_llm_with_output.invoke(messages)
+        # Run the ReAct agent
+        agent_out = await self.student_agent.ainvoke(state)
 
-        # Return updated state
+        # agent_out typically includes "messages"
+        messages = agent_out["messages"]
+        last = messages[-1]
+        if not isinstance(last, AIMessage):
+            # If tools are used, you may need to locate the last AI message
+            last = next(m for m in reversed(messages) if isinstance(m, AIMessage))
+
+        # Cast final text into your schema
+        result: MathQuestion = await self.student_llm_with_output.ainvoke(last.content)
+
+        # Return typed output (and optionally keep messages updated)
         new_state = {
             "messages": [{"role": "assistant", "content": f"The solution is: {result.solution}"}],
             "solution": result.solution,
@@ -117,7 +184,7 @@ class MathProblems:
 
         return new_state
 
-    def teaching_assistant(self, state: State) -> Dict[str, Any]:
+    async def teaching_assistant(self, state: State) -> Dict[str, Any]:
 
         INSTRUCTIONS = f"""
             You've been a teaching assistant for more than 10 years. When it comes
@@ -138,10 +205,20 @@ class MathProblems:
         if not found_system_message:
             messages = [SystemMessage(content=INSTRUCTIONS)] + messages
 
-        # Invoke the LLM with tools
-        result = self.teaching_assistant_llm_with_output.invoke(messages)
+        # Run the ReAct agent
+        agent_out = await self.teaching_assistant_agent.ainvoke(state)
 
-        # Return updated state
+        # agent_out typically includes "messages"
+        messages = agent_out["messages"]
+        last = messages[-1]
+        if not isinstance(last, AIMessage):
+            # If tools are used, you may need to locate the last AI message
+            last = next(m for m in reversed(messages) if isinstance(m, AIMessage))
+
+        # Cast final text into your schema
+        result: AssignmentResult = await self.teaching_assistant_llm_with_output.ainvoke(last.content)
+
+        # Return typed output (and optionally keep messages updated)
         new_state = {
             "messages": [{"role": "assistant", "content": f"The grade is: {result.grade}"}],
             "grade": result.grade,
@@ -185,6 +262,8 @@ def main():
    asyncio.run(math_problems.setup())
    message = "Create a math question for a grade 8 student"
    asyncio.run(math_problems.run(message))
+   # wait for evaluations before
+   time.sleep(300)
 
 if __name__ == "__main__":
     main()
