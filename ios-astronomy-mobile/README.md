@@ -100,30 +100,6 @@ The guide covers:
 - Error tracking
 - Network request monitoring
 
-## Build Commands
-
-From terminal:
-
-```bash
-# Build for simulator
-xcodebuild -project AstronomyShop.xcodeproj \
-  -scheme AstronomyShop \
-  -destination 'platform=iOS Simulator,name=iPhone 15 Pro' \
-  build
-
-# Run tests
-xcodebuild -project AstronomyShop.xcodeproj \
-  -scheme AstronomyShop \
-  -destination 'platform=iOS Simulator,name=iPhone 15 Pro' \
-  test
-
-# Archive for release
-xcodebuild -project AstronomyShop.xcodeproj \
-  -scheme AstronomyShop \
-  -archivePath build/AstronomyShop.xcarchive \
-  archive
-```
-
 ---
 
 *DO - Version 1.0 | February 2026*
