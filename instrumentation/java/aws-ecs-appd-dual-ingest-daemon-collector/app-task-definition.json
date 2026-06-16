@@ -1,0 +1,78 @@
+{
+    "family": "appd-dual-ingest-example-app-only",
+    "containerDefinitions": [
+        {
+            "name": "appd-dual-ingest-daemon-collector",
+            "image": "ghcr.io/splunk/appd-dual-ingest-daemon-collector:1.0",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "appd-dual-ingest-example-8080-tcp",
+                    "containerPort": 8080,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "APPD_APP_NAME",
+                    "value": "appd-dual-ingest-example"
+                },
+                {
+                    "name": "APPD_TIER_NAME",
+                    "value": "OrderService"
+                },
+                {
+                    "name": "APPD_NODE_NAME",
+                    "value": "OrderService-Node"
+                },       {
+                    "name": "APPD_CONTROLLER_HOST",
+                    "value": "your_appd_controller_host"
+                },
+                {
+                    "name": "APPD_ACCOUNT_NAME",
+                    "value": "your_appd_account_name"
+                },
+                {
+                    "name": "APPD_ACCESS_KEY",
+                    "value": "your_appd_access_key"
+                },
+                {
+                    "name": "OTEL_SERVICE_NAME",
+                    "value": "OrderService"
+                },
+                {
+                    "name": "OTEL_RESOURCE_ATTRIBUTES",
+                    "value": "service.namespaceaws-ecs-appd-dual-ingest-example,deployment.environment=aws-ecs-appd-dual-ingest-example,deployment.environment.name=aws-ecs-appd-dual-ingest-example"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "dependsOn": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/appd-dual-ingest-example",
+                    "awslogs-region": "<AWS Region>",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            }
+        }
+    ],
+    "executionRoleArn": "arn:aws:iam::<AWS Account ID>:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "1024",
+    "memory": "1024",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    }
+}
