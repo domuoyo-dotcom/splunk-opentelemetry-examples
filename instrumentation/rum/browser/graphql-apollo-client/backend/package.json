@@ -13,7 +13,7 @@
   "dependencies": {
     "@apollo/server": "^5.5.1",
     "@as-integrations/express4": "^1.1.2",
-    "@splunk/otel": "^3.3.0",
+    "@splunk/otel": "^4.9.0",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "express": "^4.19.0",
