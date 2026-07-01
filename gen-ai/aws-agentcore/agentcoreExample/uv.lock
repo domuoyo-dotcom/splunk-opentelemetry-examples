@@ -20,8 +20,6 @@ dependencies = [
     { name = "mcp" },
     { name = "opentelemetry-instrumentation-boto" },
     { name = "opentelemetry-instrumentation-urllib3" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
     { name = "python-dotenv" },
     { name = "splunk-opentelemetry" },
     { name = "splunk-otel-genai-emitters-splunk" },
@@ -29,6 +27,12 @@ dependencies = [
     { name = "splunk-otel-instrumentation-langchain" },
     { name = "splunk-otel-util-genai" },
     { name = "tiktoken" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
 ]
 
 [package.metadata]
@@ -42,8 +46,6 @@ requires-dist = [
     { name = "mcp", specifier = ">=1.19.0" },
     { name = "opentelemetry-instrumentation-boto", specifier = ">=0.59b0" },
     { name = "opentelemetry-instrumentation-urllib3", specifier = ">=0.59b0" },
-    { name = "pytest", specifier = ">=7.0.0" },
-    { name = "pytest-asyncio", specifier = ">=0.21.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "splunk-opentelemetry", specifier = "==2.8.0" },
     { name = "splunk-otel-genai-emitters-splunk", specifier = ">=0.1.6" },
@@ -51,6 +53,12 @@ requires-dist = [
     { name = "splunk-otel-instrumentation-langchain", specifier = ">=0.1.7" },
     { name = "splunk-otel-util-genai", specifier = ">=0.1.9" },
     { name = "tiktoken", specifier = "==0.11.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.0" },
+    { name = "pytest-asyncio", specifier = ">=0.24" },
 ]
 
 [[package]]

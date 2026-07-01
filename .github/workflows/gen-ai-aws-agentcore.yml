@@ -1,0 +1,35 @@
+name: gen-ai-aws-agentcore
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "gen-ai/aws-agentcore/**"
+      - ".github/workflows/gen-ai-aws-agentcore.yml"
+  pull_request:
+    paths:
+      - "gen-ai/aws-agentcore/**"
+      - ".github/workflows/gen-ai-aws-agentcore.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gen-ai/aws-agentcore/agentcoreExample
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.2.0
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --group dev --frozen
+
+      - name: Run unit tests
+        run: uv run pytest -v

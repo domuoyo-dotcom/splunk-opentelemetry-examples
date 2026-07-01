@@ -921,6 +921,12 @@ dependencies = [
     { name = "splunk-otel-util-genai-evals" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "langchain" },
@@ -934,6 +940,12 @@ requires-dist = [
     { name = "splunk-otel-instrumentation-langchain" },
     { name = "splunk-otel-util-genai" },
     { name = "splunk-otel-util-genai-evals" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.0" },
+    { name = "pytest-asyncio", specifier = ">=0.24" },
 ]
 
 [[package]]

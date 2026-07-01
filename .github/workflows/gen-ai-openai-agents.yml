@@ -1,0 +1,35 @@
+name: gen-ai-openai-agents
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "gen-ai/openai-agents/**"
+      - ".github/workflows/gen-ai-openai-agents.yml"
+  pull_request:
+    paths:
+      - "gen-ai/openai-agents/**"
+      - ".github/workflows/gen-ai-openai-agents.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gen-ai/openai-agents/math_problems
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.2.0
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --group dev --frozen
+
+      - name: Run unit tests
+        run: uv run pytest -v

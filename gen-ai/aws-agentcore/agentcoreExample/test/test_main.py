@@ -1,37 +1,37 @@
-# import pytest
-# from unittest.mock import Mock, patch, AsyncMock, MagicMock
-# import sys
-# from pathlib import Path
+from unittest.mock import AsyncMock, MagicMock, patch
 
-# # Add src to path for imports
-# sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-# # Standard import - no MCP client mocking needed
-# from main import app, invoke
+import pytest
 
-# class TestAgent:
-#     @patch('main.load_model')
-#     @patch('main.create_agent')
-#     @pytest.mark.asyncio
-#     async def test_invoke_with_prompt(self, mock_create_agent, mock_load_model):
-#         """Test invoke function with user prompt"""
-#         mock_graph = Mock()
-#         mock_result = {"messages": [Mock(content="Test response")]}
-#         mock_graph.ainvoke = AsyncMock(return_value=mock_result)
-#         mock_create_agent.return_value = mock_graph
 
-#         payload = {"prompt": "Hello, how are you?"}
-#         result = await invoke(payload)
+def test_add_numbers_tool(main_module):
+    assert main_module.add_numbers.invoke({"a": 2, "b": 3}) == 5
 
-#         assert result == {"result": "Test response"}
 
-# class TestBedrockAgentCoreApp:
-#     def test_app_initialization(self):
-#         """Test that BedrockAgentCoreApp is properly initialized"""
-#         assert app is not None
-#         assert hasattr(app, 'entrypoint')
+def test_model_id_is_configured(model_module):
+    assert model_module.MODEL_ID == "gpt-5-mini"
 
-#     def test_entrypoint_decorator(self):
-#         """Test that entrypoint function is properly decorated"""
 
-#         assert hasattr(invoke, '__name__')
-#         assert invoke.__name__ == 'invoke'
+@pytest.mark.asyncio
+async def test_invoke_returns_agent_response(main_module):
+    mock_graph = MagicMock()
+    mock_configured_graph = MagicMock()
+    mock_configured_graph.ainvoke = AsyncMock(
+        return_value={"messages": [MagicMock(content="Agentic AI coordinates specialized agents.")]}
+    )
+    mock_graph.with_config.return_value = mock_configured_graph
+    main_module.mcp_client.get_tools = AsyncMock(return_value=[])
+
+    with patch.object(main_module, "_create_react_agent", return_value=mock_graph):
+        result = await main_module.invoke({"prompt": "What is Agentic AI?"})
+
+    assert result == {"result": "Agentic AI coordinates specialized agents."}
+
+
+def test_dependencies_import():
+    import bedrock_agentcore
+    import langchain
+    import splunk_otel
+
+    assert bedrock_agentcore.__name__ == "bedrock_agentcore"
+    assert langchain.__name__ == "langchain"
+    assert splunk_otel.__name__ == "splunk_otel"

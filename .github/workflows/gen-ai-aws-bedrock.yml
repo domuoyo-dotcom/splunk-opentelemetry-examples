@@ -1,0 +1,35 @@
+name: gen-ai-aws-bedrock
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "gen-ai/aws-bedrock/**"
+      - ".github/workflows/gen-ai-aws-bedrock.yml"
+  pull_request:
+    paths:
+      - "gen-ai/aws-bedrock/**"
+      - ".github/workflows/gen-ai-aws-bedrock.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gen-ai/aws-bedrock
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Run unit tests
+        run: pytest -v
