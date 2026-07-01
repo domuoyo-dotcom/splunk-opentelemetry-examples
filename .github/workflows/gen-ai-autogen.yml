@@ -1,0 +1,35 @@
+name: gen-ai-autogen
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "gen-ai/autogen/**"
+      - ".github/workflows/gen-ai-autogen.yml"
+  pull_request:
+    paths:
+      - "gen-ai/autogen/**"
+      - ".github/workflows/gen-ai-autogen.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gen-ai/autogen/src
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --group dev --frozen
+
+      - name: Run unit tests
+        run: uv run pytest -v

@@ -86,6 +86,19 @@ Execute the following command to run the application:
 ``` bash
 uv run opentelemetry-instrument python app.py
 ```
+
+## Run Unit Tests
+
+Unit tests validate that dependencies resolve and that agent logic works with mocked
+OpenAI and MCP calls. They do not require an API key or a running collector.
+
+``` bash
+uv sync --group dev
+uv run pytest -v
+```
+
+In GitHub Actions, these tests run automatically when files under `gen-ai/autogen/`
+change.
 ## View Traces in Splunk Observability Cloud
 
 You should see several traces in Splunk Observability Cloud, which are linked together using Span Links. 
