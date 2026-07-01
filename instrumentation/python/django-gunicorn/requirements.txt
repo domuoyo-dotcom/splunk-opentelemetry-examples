@@ -1,0 +1,4 @@
+Django>=5.2,<6.0
+gunicorn>=23,<24
+splunk-opentelemetry>=2.0
+opentelemetry-instrumentation-django
