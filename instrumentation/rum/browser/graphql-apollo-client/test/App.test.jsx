@@ -34,8 +34,9 @@ describe("App", () => {
         );
 
         expect(screen.getByText("My first Apollo app 🚀")).toBeInTheDocument();
-        expect(await screen.findByText("The Awakening")).toBeInTheDocument();
         expect(await screen.findByText("Kate Chopin")).toBeInTheDocument();
-        expect(await screen.findByText("City of Glass")).toBeInTheDocument();
+        expect(await screen.findByText("Paul Auster")).toBeInTheDocument();
+        expect(screen.getAllByText("The Awakening")).toHaveLength(2);
+        expect(screen.getAllByText("City of Glass")).toHaveLength(2);
     });
 });
