@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node -r @splunk/otel/instrument index.js"
+    "start": "node -r @splunk/otel/instrument index.js",
+    "test": "node --test test/**/*.test.js"
   },
   "keywords": [],
   "author": "",

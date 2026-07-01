@@ -11,27 +11,12 @@ import { Observable } from "@apollo/client/utilities";
 import { trace, context, propagation } from "@opentelemetry/api";
 import { print } from "graphql"; // Import print for DocumentNode to string conversion
 import App from "./App";
+import { extractTraceCorrelation } from "./graphqlTracing";
 
 const GRAPHQL_ENDPOINT = "http://localhost:4000/graphql";
 
 // OpenTelemetry tracer for GraphQL spans.
 const tracer = trace.getTracer("frontend-graphql");
-
-// Function to extract trace correlation from Server-Timing header
-function extractTraceCorrelation(serverTiming, span) {
-    if (!serverTiming) return;
-    // Match Splunk's Server-Timing format: traceparent;desc="00-traceId-spanId-01"
-    const traceParentMatch = serverTiming.match(/traceparent;desc="([^"]+)"/);
-    if (traceParentMatch) {
-        const traceParent = traceParentMatch[1];
-        const parts = traceParent.split('-');
-        if (parts.length >= 3) {
-            span.setAttribute('link.traceId', parts[1]);
-            span.setAttribute('link.spanId', parts[2]);
-            // console.log(`Extracted traceId: ${parts[1]}, spanId: ${parts[2]}`); // Uncomment for debugging
-        }
-    }
-}
 
 // Custom terminating link that handles the fetch and adds serverTiming to the result extensions
 const customFetchLink = new ApolloLink((operation) => {

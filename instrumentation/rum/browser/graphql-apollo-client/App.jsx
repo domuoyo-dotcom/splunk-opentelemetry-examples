@@ -3,7 +3,7 @@ import React from "react";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 
-const GET_BOOKS = gql`
+export const GET_BOOKS = gql`
     query GetBooks {
       books {
         title
@@ -12,7 +12,7 @@ const GET_BOOKS = gql`
     }
 `;
 
-const GET_BOOK_TITLES = gql`
+export const GET_BOOK_TITLES = gql`
     query GetBookTitles {
       books {
         title
