@@ -119,7 +119,6 @@ export default function App() {
   );
 }
 ```
-React Navigation 7 (`@react-navigation/native` ^7) is supported. Screen transitions are auto-tracked when `NavigationContainer` is mounted inside the provider.
 
 ---
 
