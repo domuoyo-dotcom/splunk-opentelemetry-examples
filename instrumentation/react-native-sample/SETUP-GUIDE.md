@@ -2,8 +2,8 @@
 
 How to install dependencies and run the **Astronomy Shop** React Native app (`react-native-sample/`) on iOS and Android.
 
-This is an **Expo SDK 54** app. Development uses **Expo Go**. Splunk RUM instrumentation requires a **development build**
-See [MRUM-Splunk-Instrumentation-Guide.md](./MRUM-Splunk-Instrumentation-Guide.md).
+>This is an **Expo SDK 54** app. Development uses **Expo Go**. Splunk RUM instrumentation requires a **development build**.
+>See [MRUM-Splunk-Instrumentation-Guide.md](./MRUM-Splunk-Instrumentation-Guide.md).
 
 ---
 
