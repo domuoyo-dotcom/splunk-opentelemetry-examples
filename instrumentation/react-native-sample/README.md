@@ -1,4 +1,4 @@
-# Astronomy Shop — React Native
+# Astronomy Shop - React Native
 A Cross-platform (iOS & Android) React Native e-commerce demo app for astronomy gear: browse telescopes, eyepieces, and accessories, add items to cart, checkout, and view order history.
 
 ## Features
