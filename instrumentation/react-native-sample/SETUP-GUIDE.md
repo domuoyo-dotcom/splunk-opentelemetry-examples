@@ -2,20 +2,9 @@
 
 How to install dependencies and run the **Astronomy Shop** React Native app (`react-native-sample/`) on iOS and Android.
 
->This is an **Expo SDK 54** app. Development uses **Expo Go**. Splunk RUM instrumentation requires a **development build**.
+>This is an **Expo SDK 54** app. Development uses **Expo Go**. Splunk RUM instrumentation requires a **development build**
 >See [MRUM-Splunk-Instrumentation-Guide.md](./MRUM-Splunk-Instrumentation-Guide.md).
 
----
-
-## App overview
-
-| Item | Value                                                                              |
-|---|------------------------------------------------------------------------------------|
-| App name | Astronomy Shop                                                                     |
-| Directory | `react-native-sample/`                                                             |
-| Expo SDK | 54                                                                                 |
-| React Native | 0.81.5                                                                             |
-| Backend | None - products from [DummyJSON](https://dummyjson.com); cart/orders are in-memory |
 ---
 
 ## Prerequisites
@@ -26,7 +15,7 @@ How to install dependencies and run the **Astronomy Shop** React Native app (`re
 | iOS (macOS only) | Xcode 15+ with iOS Simulator runtime |
 | Android | Android Studio with an emulator, **or** a physical device with Expo Go from the Play Store |
 
-Install project dependencies once:
+Install project dependencies:
 
 ```bash
 cd react-native-sample
@@ -85,7 +74,7 @@ This script:
 - Runs `adb reverse tcp:8081 tcp:8081` so the emulator reaches Metro at `127.0.0.1`
 - Starts Expo with `--localhost` (LAN URLs fail on emulators)
 
-**NOTE: Use Play Store Expo Go** on the emulator. The app targets **SDK 54**; an older Expo Go will show a compatibility error.
+>**NOTE: Use Play Store Expo Go** on the emulator. The app targets **SDK 54**; an older Expo Go will show a compatibility error.
 
 ### Physical Android device
 
@@ -115,4 +104,4 @@ npm run android:tunnel
 
 ---
 
-*Updated July 2026 — Astronomy Shop React Native (Expo SDK 54)*
+@domuoyo-dotcom- July 2026
