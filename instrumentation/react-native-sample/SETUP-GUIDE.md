@@ -1,4 +1,4 @@
-# REact Native Astronomy Shop - Setup Guide
+# React Native Astronomy Shop - Setup Guide
 
 How to install dependencies and run the **Astronomy Shop** React Native app (`react-native-sample/`) on iOS and Android.
 

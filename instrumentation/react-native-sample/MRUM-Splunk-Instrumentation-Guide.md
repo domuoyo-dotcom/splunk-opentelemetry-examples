@@ -1,4 +1,4 @@
-# Astronomy Shop — Splunk MRUM Instrumentation Guide
+# Astronomy Shop - Splunk MRUM Instrumentation Guide
 
 How to add **Splunk Real User Monitoring (RUM)** to the Astronomy Shop React Native app. These instructions are only to be used as a guideline - please refer to the official Splunk Observability Cloud documentation for latest instructions and latest agent versions.
 > **SDK:** [`@splunk/otel-react-native`](https://github.com/signalfx/splunk-otel-react-native)  
@@ -119,7 +119,6 @@ export default function App() {
   );
 }
 ```
-React Navigation 7 (`@react-navigation/native` ^7) is supported. Screen transitions are auto-tracked when `NavigationContainer` is mounted inside the provider.
 
 ---
 
