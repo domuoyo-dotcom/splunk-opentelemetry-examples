@@ -57,7 +57,7 @@ npm run android:tunnel
 npm run ios
 ```
 
-## License
-Sample project for demonstration purposes.
+## Usage
+Sample project for demonstration purposes only.
 
 @domuoyo-dotcom - July 2026
