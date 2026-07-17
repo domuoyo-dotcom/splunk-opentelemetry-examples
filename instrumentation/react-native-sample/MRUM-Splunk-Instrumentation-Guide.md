@@ -1,20 +1,7 @@
 # Astronomy Shop — Splunk MRUM Instrumentation Guide
 
-How to add **Splunk Real User Monitoring (RUM)** to the Astronomy Shop React Native app. These instructions are only to be used as a guideline - please refer to the official Splunk Observability Cloud documentation for latest instructions and agent versions.
-
-References:
-
+How to add **Splunk Real User Monitoring (RUM)** to the Astronomy Shop React Native app. These instructions are only to be used as a guideline - please refer to the official Splunk Observability Cloud documentation for latest instructions and latest agent versions.
 > **SDK:** [`@splunk/otel-react-native`](https://github.com/signalfx/splunk-otel-react-native)  
-> **App:** Expo SDK 54 · React Native 0.81 · React Navigation 7
-
----
-
-After instrumenting, build and run natively:
-
-```bash
-npx expo prebuild
-npx expo run:ios      # or: npx expo run:android
-```
 
 ---
 
@@ -38,10 +25,9 @@ EXPO_PUBLIC_SPLUNK_RUM_TOKEN=your-rum-token
 EXPO_PUBLIC_SPLUNK_APP_NAME=astronomy-shop-rn
 EXPO_PUBLIC_SPLUNK_ENV=dev-astronomy-shop-rn
 ```
-
 ---
 
-## Part 1 — Install the SDK
+## Part 1 - Install the SDK
 
 ```bash
 cd react-native-sample
@@ -80,11 +66,11 @@ Then:
 cd ios && pod install && cd ..
 ```
 
-Android: ensure `minSdkVersion` is 24+ and core library desugaring is enabled in `android/app/build.gradle` per [Splunk install docs](https://help.splunk.com/en/splunk-observability-cloud/manage-data/instrument-front-end-applications/instrument-mobile-and-web-applications-for-splunk-real-user-monitoring-rum/instrument-react-native-agent-applications-for-splunk-rum).
+Android: ensure `minSdkVersion` is 24+ and core library desugaring is enabled in `android/app/build.gradle`
 
 ---
 
-## Part 2 — Configuration
+## Part 2 - Configuration
 
 Create `src/config/splunkConfig.ts`:
 
@@ -93,12 +79,12 @@ const token = process.env.EXPO_PUBLIC_SPLUNK_RUM_TOKEN ?? '';
 
 export const splunkConfig = {
   endpoint: {
-    realm: process.env.EXPO_PUBLIC_SPLUNK_REALM ?? 'us0',
+    realm: process.env.EXPO_PUBLIC_SPLUNK_REALM ?? 'your-realm',
     rumAccessToken: token,
   },
   appName: process.env.EXPO_PUBLIC_SPLUNK_APP_NAME ?? 'astronomy-shop-rn',
-  deploymentEnvironment: process.env.EXPO_PUBLIC_SPLUNK_ENV ?? 'development',
-  appVersion: '1.0.0', // matches app.json
+  deploymentEnvironment: process.env.EXPO_PUBLIC_SPLUNK_ENV ?? 'dev-astronomy-shop-rn',
+  appVersion: '1.0.0', 
 };
 
 export const isSplunkConfigured =
@@ -107,7 +93,7 @@ export const isSplunkConfigured =
 
 ---
 
-## Part 3 — Initialize in App.tsx
+## Part 3 - Initialize in App.tsx
 
 Wrap the existing provider tree with `SplunkRumProvider`. The app entry point is `App.tsx`:
 
@@ -133,24 +119,15 @@ export default function App() {
   );
 }
 ```
-
 React Navigation 7 (`@react-navigation/native` ^7) is supported. Screen transitions are auto-tracked when `NavigationContainer` is mounted inside the provider.
-
-**Navigation routes to expect in RUM:**
-
-| Tab / stack | Route names |
-|---|---|
-| Tabs | `HomeTab`, `ProductsTab`, `CartTab`, `OrdersTab`, `ProfileTab` |
-| Products stack | `ProductsList`, `ProductDetail` |
-| Cart stack | `CartMain`, `Checkout`, `OrderConfirmation` |
 
 ---
 
-## Part 4 — Custom workflows (shop journeys)
+## Part 4 - Custom workflows
 
 Use `SplunkRum.instance.customTracking` for e-commerce flows. Instrument at `src/store/ShopContext.tsx` where business logic already lives.
 
-Suggested workflows matching the Android reference app:
+Suggested workflows:
 
 | Workflow name | Trigger | Suggested attributes |
 |---|---|---|
@@ -160,7 +137,7 @@ Suggested workflows matching the Android reference app:
 | `PlaceOrder` | `createOrder()` success | `order.total`, `order.item_count` |
 | `PaymentError` | `checkPaymentError()` returns error | `error.type` |
 
-Example helper — create `src/utils/splunkTracking.ts`:
+Create Example helper - `src/utils/splunkTracking.ts`:
 
 ```typescript
 import { SplunkRum } from '@splunk/otel-react-native';
@@ -205,7 +182,7 @@ await workflow.end();
 
 ---
 
-## Part 5 — Network and errors
+## Part 5 - Network and errors
 
 **Auto-instrumented without extra code:**
 
@@ -215,15 +192,15 @@ await workflow.end();
 
 ---
 
-## Part 6 — Sensitive data (Checkout)
+## Part 6 - Sensitive data (Checkout)
 
-`CheckoutScreen.tsx` displays demo PII and payment fields (name, email, address, card number, CVV). Do not send raw payment values in custom events or global attributes.
+`CheckoutScreen.tsx` displays demo PII and payment fields (name, email, address, card number, CVV).
 
 ---
 
-## Part 7 — Verify in Splunk
+## Part 7 - Verify in Splunk
 
-1. Build and run a **development build** (not Expo Go):
+1. Build and run a **development build**:
 
 ```bash
 npx expo run:ios
@@ -231,7 +208,7 @@ npx expo run:ios
 npx expo run:android
 ```
 
-2. Exercise the app: browse products → add to cart → checkout → view orders.
+2. Explore the app: browse products → add to cart → checkout → view orders.
 3. Open Splunk Observability Cloud → **RUM** → select app `astronomy-shop-rn`.
 
 | RUM section | What to look for |
@@ -242,18 +219,6 @@ npx expo run:android
 | **Tag Spotlight** | Filter by `AddToCart`, `PlaceOrder`, `ProductSearch` |
 
 Allow **2–3 minutes** after first launch for data to appear.
-
----
-
-## Files to add or modify
-
-| File | Change |
-|---|---|
-| `app.json` | Add `@splunk/otel-react-native` plugin |
-| `src/config/splunkConfig.ts` | Realm, token, app name (from env) |
-| `App.tsx` | Wrap with `SplunkRumProvider`; optional error reporting |
-| `src/utils/splunkTracking.ts` | Custom event helpers |
-| `src/store/ShopContext.tsx` | Call tracking in cart/order/search actions |
 
 ---
 

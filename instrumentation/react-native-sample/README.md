@@ -1,8 +1,5 @@
-# Astronomy Shop — React Native
-
-Cross-platform (iOS & Android) React Native port of the [base-android-jetpack-astronomy-shop](../base-android-jetpack-astronomy-shop) app.
-
-An e-commerce demo for astronomy gear: browse telescopes, eyepieces, and accessories, add items to cart, checkout, and view order history.
+# Astronomy Shop - React Native
+A Cross-platform (iOS & Android) React Native e-commerce demo app for astronomy gear: browse telescopes, eyepieces, and accessories, add items to cart, checkout, and view order history.
 
 ## Features
 
@@ -10,7 +7,6 @@ An e-commerce demo for astronomy gear: browse telescopes, eyepieces, and accesso
 - **Bottom tab navigation** with cart badge
 - **Product catalog** from DummyJSON API with astronomy-themed overlay and local fallback data
 - **In-memory cart & orders** with tax (8.5%), shipping ($9.99 or free over $50), and bulk savings display
-- **Material Design 3** styling via React Native Paper (indigo primary `#3F51B5`)
 
 ## Tech Stack
 
@@ -22,21 +18,6 @@ An e-commerce demo for astronomy gear: browse telescopes, eyepieces, and accesso
 | UI | React Native Paper |
 | State | React Context (mirrors Android `MainViewModel`) |
 | API | DummyJSON (`https://dummyjson.com`) |
-
-## Project Structure
-
-```
-src/
-├── api/              # DummyJSON product fetching & mapping
-├── components/       # ProductCard, CartItemCard, OrderCard, etc.
-├── constants/        # Astronomy product templates & sample data
-├── models/           # TypeScript interfaces
-├── navigation/       # AppNavigator, route types
-├── screens/          # 8 screen components
-├── store/            # ShopContext (cart, orders, products)
-├── theme/            # Colors & Paper theme
-└── utils/            # Formatters & pricing logic
-```
 
 ## Getting Started
 
